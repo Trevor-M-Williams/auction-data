@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auction Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="data.js"></script>
+    <style>
+      .sortable:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 p-8">
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold mb-6">Big Ol Dogs Auction 2023</h1>
+      <div class="overflow-x-auto">
+        <table
+          class="min-w-full bg-white rounded-lg shadow-md"
+          id="auction-table"
+        >
+          <thead>
+            <tr class="bg-gray-200 text-gray-600 text-left text-sm uppercase">
+              <th class="py-3 px-4 sortable" data-sort="count">#</th>
+              <th class="py-3 px-4">Team</th>
+              <th class="py-3 px-4 sortable" data-sort="playerName">Player</th>
+              <th class="py-3 px-4 sortable" data-sort="playerPosition">
+                Position
+              </th>
+              <th class="py-3 px-4 sortable" data-sort="teamName">Team Name</th>
+              <th class="py-3 px-4 sortable" data-sort="auctionCost">Cost</th>
+            </tr>
+          </thead>
+          <tbody id="auction-data">
+            <!-- Auction items will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const auctionContainer = document.getElementById("auction-data");
+      const auctionTable = document.getElementById("auction-table");
+
+      // Function to sort table by the specified key
+      function sortTableByKey(key, asc = true) {
+        auctionData.sort((a, b) => {
+          let aValue = a[key];
+          let bValue = b[key];
+
+          if (key === "count" || key === "auctionCost") {
+            // Convert string values to numbers for sorting
+            aValue =
+              key === "count"
+                ? parseInt(aValue.replace("#", ""), 10)
+                : parseFloat(aValue.replace("$", ""));
+            bValue =
+              key === "count"
+                ? parseInt(bValue.replace("#", ""), 10)
+                : parseFloat(bValue.replace("$", ""));
+          } else {
+            // For string values, perform case-insensitive comparison
+            aValue = aValue.toLowerCase();
+            bValue = bValue.toLowerCase();
+            if (aValue < bValue) return asc ? -1 : 1;
+            if (aValue > bValue) return asc ? 1 : -1;
+            return 0;
+          }
+
+          return asc ? aValue - bValue : bValue - aValue;
+        });
+        renderTable();
+      }
+
+      // Function to render the table rows
+      function renderTable() {
+        auctionContainer.innerHTML = "";
+        auctionData.forEach((item, index) => {
+          const auctionRow = document.createElement("tr");
+          auctionRow.className = index % 2 === 0 ? "bg-gray-100" : "bg-white";
+
+          auctionRow.innerHTML = `
+        <td class="py-3 px-4 text-gray-700">${item.count}</td>
+        <td class="py-3 px-4">
+            <img src="${item.teamImgSrc}" alt="${
+            item.teamName
+          }" class="w-10 h-10">
+        </td>
+        <td class="py-3 px-4 flex items-center">
+            <img src="${item.playerImgSrc}" alt="${
+            item.playerName
+          }" class="w-10 h-10 rounded-full mr-4">
+            <span>${item.playerName}</span>
+        </td>
+        <td class="py-3 px-4 text-gray-700">${item.playerPosition.slice(
+          0,
+          2
+        )}</td>
+        <td class="py-3 px-4 text-gray-700">${item.teamName}</td>
+        <td class="py-3 px-4 text-gray-700">${item.auctionCost}</td>
+      `;
+
+          auctionContainer.appendChild(auctionRow);
+        });
+      }
+
+      // Initial render of the table
+      renderTable();
+
+      // Add click event listeners to sortable headers
+      document.querySelectorAll(".sortable").forEach((header) => {
+        let asc = true;
+        header.addEventListener("click", () => {
+          const key = header.getAttribute("data-sort");
+          sortTableByKey(key, asc);
+          asc = !asc;
+        });
+      });
+    </script>
+  </body>
+</html>
