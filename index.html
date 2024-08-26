@@ -13,7 +13,7 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100 p-8">
+  <body class="bg-gray-100 px-2 py-6 md:px-6">
     <div class="container mx-auto">
       <h1 class="text-2xl font-bold mb-6">Big Ol Dogs Auction 2023</h1>
       <div class="overflow-x-auto">
@@ -24,12 +24,11 @@
           <thead>
             <tr class="bg-gray-200 text-gray-600 text-left text-sm uppercase">
               <th class="py-3 px-4 sortable" data-sort="count">#</th>
-              <th class="py-3 px-4">Team</th>
+              <th class="py-3 px-4 sortable" data-sort="teamName">Team</th>
               <th class="py-3 px-4 sortable" data-sort="playerName">Player</th>
               <th class="py-3 px-4 sortable" data-sort="playerPosition">
                 Position
               </th>
-              <th class="py-3 px-4 sortable" data-sort="teamName">Team Name</th>
               <th class="py-3 px-4 sortable" data-sort="auctionCost">Cost</th>
             </tr>
           </thead>
@@ -83,11 +82,7 @@
 
           auctionRow.innerHTML = `
         <td class="py-3 px-4 text-gray-700">${item.count}</td>
-        <td class="py-3 px-4">
-            <img src="${item.teamImgSrc}" alt="${
-            item.teamName
-          }" class="w-10 h-10">
-        </td>
+        <td class="py-3 px-4 text-gray-700">${item.teamName}</td>
         <td class="py-3 px-4 flex items-center">
             <img src="${item.playerImgSrc}" alt="${
             item.playerName
@@ -98,7 +93,6 @@
           0,
           2
         )}</td>
-        <td class="py-3 px-4 text-gray-700">${item.teamName}</td>
         <td class="py-3 px-4 text-gray-700">${item.auctionCost}</td>
       `;
 
